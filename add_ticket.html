@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <title>إضافة تذكرة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: "Cairo", sans-serif;
+        background-image: url("img/ifstockphoto-46.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        margin: 0;
+        padding-top: 80px;
+        direction: rtl;
+      }
+
+      .navbar {
+        background-color: rgb(6, 141, 137);
+        backdrop-filter: blur(6px);
+        padding: 15px 0;
+      }
+
+      .navbar-brand,
+      .navbar-nav .nav-link {
+        color: white !important;
+        font-weight: 600;
+        font-size: 20px;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: #00d9ff !important;
+      }
+
+      .form-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 30px 35px;
+        border: 2px solid #00d9ff;
+        border-radius: 15px;
+        max-width: 850px;
+        margin: auto;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        color: #000;
+      }
+
+      .form-container h1 {
+        text-align: center;
+        color: #00aabb;
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        direction: rtl;
+      }
+
+      .form-control {
+        margin-bottom: 15px;
+      }
+
+      .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .btn-success {
+        background-color: rgb(6, 141, 137);
+        border: none;
+      }
+
+      .btn-success:hover {
+        background-color: #009ab3;
+      }
+
+      .btn-secondary {
+        background-color: #888;
+        border: none;
+      }
+
+      .btn-secondary:hover {
+        background-color: #555;
+      }
+
+      @media screen and (max-width: 768px) {
+        .btn-group {
+          flex-direction: column;
+        }
+
+        .btn-group .btn {
+          margin-bottom: 10px;
+        }
+      }
+
+      .overlay-success {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .success-card {
+        background-color: #fff;
+        padding: 30px 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 90%;
+        width: 400px;
+      }
+
+      .success-card h4 {
+        color: #00aa66;
+        font-size: 22px;
+        margin-bottom: 15px;
+      }
+
+      .success-card i {
+        font-size: 40px;
+        color: #00aa66;
+        margin-bottom: 10px;
+      }
+      
+      body.dark-mode {
+        color: #ffffff;
+        background-image: none;
+      }
+
+      body.dark-mode .form-container {
+        background-color: #1e1e1e !important;
+        color: #fff;
+        border-color: #444;
+      }
+
+      body.dark-mode input,
+      body.dark-mode select,
+      body.dark-mode textarea {
+        background-color: #2a2a2a91 !important;
+        color: #fff !important;
+        border: 1px solid #555 !important;
+      }
+
+      body.dark-mode .btn-success {
+        background-color: #4caf50 !important;
+        color: white;
+      }
+
+      body.dark-mode .btn-secondary {
+        background-color: #555 !important;
+        color: white;
+      }
+
+      body.dark-mode .navbar {
+        background-color: #1f1f1f !important;
+        color: #fff;
+        border-bottom: 1px solid #333;
+      }
+
+      body.dark-mode .navbar a.nav-link {
+        color: #ccc !important;
+      }
+
+      body.dark-mode .navbar a.nav-link:hover {
+        color: #90caf9 !important;
+      }
+
+      body.dark-mode .success-card {
+        background-color: #2a2a2a;
+        color: #90ee90;
+      }
+
+      body.dark-mode .success-card i {
+        color: #90ee90;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="index.html"
+          ><i class="fas fa-notes-medical"></i> MediLink</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"
+            ><i class="fas fa-bars" style="color: white"></i
+          ></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="main.html">الرئيسية</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="room-management.html">إدارة التذاكر</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="add_ticket.html">إضافة التذاكر</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="form-container mt-4">
+      <h1><i class="fa-solid fa-address-card"></i> استمارة تذكرة طبية</h1>
+      <form id="ticketForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>اسم المريض:</label>
+            <input type="text" class="form-control" id="patientName" required />
+          </div>
+          <div class="form-group col-md-6">
+            <label>اسم الدكتور:</label>
+            <input type="text" class="form-control" id="doctorName" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>اسم التمريض:</label>
+            <input type="text" class="form-control" id="nurseName" required />
+          </div>
+          <div class="form-group col-md-6">
+            <label>تاريخ التذكرة:</label>
+            <input type="date" class="form-control" id="date" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>رقم الغرفة:</label>
+          <select class="form-control" id="roomNumber" required>
+            <option value="">اختر الغرفة</option>
+            <option value="101">101</option>
+            <option value="102">102</option>
+            <option value="ICU">ICU</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>اسم الدواء:</label>
+            <input type="text" class="form-control" id="medicineName" />
+          </div>
+          <div class="form-group col-md-6">
+            <label>وقت تذكير الدواء:</label>
+            <input type="time" class="form-control" id="medicineTime" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>طريقة أخذ العلاج:</label>
+          <select class="form-control" id="rout">
+            <option value="">اختر الطريقة</option>
+            <option value="عن طريق الفم">عن طريق الفم</option>
+            <option value="حقن">حقن</option>
+            <option value="وريدي">وريدي</option>
+            <option value="استنشاق">استنشاق</option>
+            <option value="موضعي">موضعي</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>علاجات إضافية وأوقاتها:</label>
+          <div id="medicationsContainer"></div>
+          <button
+            type="button"
+            class="btn btn-sm btn-info mt-2"
+            onclick="addMedication()"
+          >
+            ➕ إضافة علاج
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label>حالة المريض:</label>
+          <select class="form-control" id="status" required>
+            <option value="">-- اختر الحالة --</option>
+            <option value="مستقر">مستقر</option>
+            <option value="حرج">حرج</option>
+            <option value="شديد">شديد</option>
+          </select>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-success">💾 حفظ التذكرة</button>
+          <a href="main.html" class="btn btn-secondary">⬅️ الرجوع للرئيسية</a>
+        </div>
+      </form>
+    </div>
+
+    <div id="successOverlay" class="overlay-success">
+      <div class="success-card">
+        <i class="fas fa-check-circle"></i>
+        <h4>تم حفظ التذكرة بنجاح!</h4>
+      </div>
+    </div>
+
+    <script>
+      function addMedication(name = "", time = "", route = "") {
+        const container = document.getElementById("medicationsContainer");
+        const div = document.createElement("div");
+        div.className = "form-row align-items-center mb-2";
+        div.innerHTML = `
+        <div class="col-md-4"><input type="text" class="form-control" placeholder="اسم العلاج" value="${name}"></div>
+        <div class="col-md-4"><input type="time" class="form-control" value="${time}"></div>
+        <div class="col-md-3">
+          <select class="form-control">
+            <option value="">طريقة العلاج</option>
+            <option value="عن طريق الفم" ${
+              route === "عن طريق الفم" ? "selected" : ""
+            }>عن طريق الفم</option>
+            <option value="حقن" ${
+              route === "حقن" ? "selected" : ""
+            }>حقن</option>
+            <option value="وريدي" ${
+              route === "وريدي" ? "selected" : ""
+            }>وريدي</option>
+            <option value="استنشاق" ${
+              route === "استنشاق" ? "selected" : ""
+            }>استنشاق</option>
+            <option value="موضعي" ${
+              route === "موضعي" ? "selected" : ""
+            }>موضعي</option>
+          </select>
+        </div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash-alt"></i></button></div>
+      `;
+        container.appendChild(div);
+      }
+
+      document
+        .getElementById("ticketForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const medicationRows = document.querySelectorAll(
+            "#medicationsContainer .form-row"
+          );
+          const medications = [];
+          medicationRows.forEach((row) => {
+            const name = row.querySelector('input[type="text"]').value.trim();
+            const time = row.querySelector('input[type="time"]').value.trim();
+            const route = row.querySelector("select").value;
+            if (name && time && route) {
+              medications.push({ name, time, route });
+            }
+          });
+
+          const ticket = {
+            patientName: document.getElementById("patientName").value,
+            doctorName: document.getElementById("doctorName").value,
+            nurseName: document.getElementById("nurseName").value,
+            date: document.getElementById("date").value,
+            status: document.getElementById("status").value,
+            roomNumber: document.getElementById("roomNumber").value,
+            medicineName: document.getElementById("medicineName").value,
+            medicineTime: document.getElementById("medicineTime").value,
+            rout: document.getElementById("rout").value,
+            medications: medications,
+          };
+
+          const tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
+          tickets.push(ticket);
+          localStorage.setItem("tickets", JSON.stringify(tickets));
+
+          document.getElementById("successOverlay").style.display = "flex";
+
+          setTimeout(() => {
+            window.location.href = "main.html";
+          }, 3000);
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    
+    <script>
+      const savedMode = localStorage.getItem("theme");
+      if (savedMode === "dark") {
+        document.body.classList.add("dark-mode");
+      }
+    </script>
+  </body>
+</html>

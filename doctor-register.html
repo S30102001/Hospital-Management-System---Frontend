@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة تسجيل طبيب</title>
+  <link rel="stylesheet" href="font/css/all.min.css">
+  <link rel="stylesheet" href="font/js/all.min.js">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Almarai:wght@300;400;700;800&family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Fjalla+One&family=Fustat:wght@200..800&family=Reem+Kufi:wght@400..700&family=Savate:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Cairo', sans-serif;
+      background-color: #023d8a3a;
+      direction: rtl;
+    }
+
+    .form-paper {
+      max-width: 850px;
+      margin: auto;
+      padding: 40px 50px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 2px solid #0ca5b0;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      font-family: "Fustat", sans-serif;
+      font-weight: 600;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: #000;
+      text-decoration: underline;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #000;
+    }
+
+    input {
+      padding: 8px;
+      border: 1px solid #aaa;
+      font-size: 20px;
+      border-radius: 4px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: #023d8a3a;
+      color: #000;
+      border: none;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background: rgb(242, 241, 247);
+    }
+
+    .button1 {
+      margin-top: 30px;
+      width: 100%;
+      padding: 12px;
+      background-color: #023e8a;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .button1:hover {
+      background-color: #014089;
+    }
+
+    .signature-line {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .signature-line div {
+      width: 40%;
+      border-top: 1px solid #000;
+      text-align: center;
+      padding-top: 5px;
+      font-size: 14px;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0,0,0,0.4);
+      z-index: 9999;
+      display: none;
+    }
+
+    .success-popup {
+      background-color: #ffffff;
+      border: 3px solid #0ca5b0;
+      border-radius: 20px;
+      padding: 30px 40px;
+      width: 350px;
+      position: fixed;
+      top: 50%;
+      right: 50%;
+      transform: translate(50%, -50%);
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      z-index: 10000;
+      display: none;
+      font-family: "Almarai", sans-serif;
+    }
+
+    .success-popup h3 {
+      color: #023e8a;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .success-popup p {
+      font-size: 16px;
+    }
+
+    /* رسبونسف */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .form-paper {
+        padding: 25px 20px;
+        border-radius: 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      input {
+        font-size: 16px;
+      }
+
+      .button1 {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .signature-line {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .signature-line div {
+        width: 80%;
+      }
+
+      .success-popup {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <button class="close-btn" onclick="window.location.href='./main.html'">
+  x
+  </button>
+
+  <div class="form-paper">
+    <h1>استمارة تسجيل طبيب</h1>
+
+    <form onsubmit="saveDoctor(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>الاسم الكامل</label>
+          <input type="text" id="fullName" required>
+        </div>
+        <div class="form-group">
+          <label>تاريخ الميلاد</label>
+          <input type="date" id="birthDate" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>العمر</label>
+          <input type="number" id="age" required>
+        </div>
+        <div class="form-group">
+          <label>التخصص</label>
+          <input type="text" id="specialization" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>تاريخ التخرج</label>
+          <input type="date" id="gradDate" required>
+        </div>
+        <div class="form-group">
+          <label>تاريخ التسجيل</label>
+          <input type="date" id="registerDate" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <input type="text" id="phone" required>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="email" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <input type="password" id="password" required>
+        </div>
+        <div class="form-group">
+          <!-- ملاحظات إضافية أو احتياطي -->
+        </div>
+      </div>
+
+      <button type="submit" class="button1">حفظ البيانات</button>
+
+      <div class="signature-line">
+        <div>توقيع الطبيب</div>
+        <div>توقيع الإدارة</div>
+      </div>
+    </form>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="success-popup" id="popupMessage">
+      <h3>✅ تم الحفظ بنجاح</h3>
+      <p>تم تسجيل بيانات الطبيب.</p>
+    </div>
+  </div>
+
+  <script>
+    function saveDoctor(e) {
+      e.preventDefault();
+      const doctor = {
+        name: document.getElementById('fullName').value,
+        password: document.getElementById('password').value,
+        birthDate: document.getElementById('birthDate').value,
+        age: document.getElementById('age').value,
+        specialization: document.getElementById('specialization').value,
+        gradDate: document.getElementById('gradDate').value,
+        registerDate: document.getElementById('registerDate').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value
+      };
+
+      let doctors = JSON.parse(localStorage.getItem('doctors') || '[]');
+      doctors.push(doctor);
+      localStorage.setItem('doctors', JSON.stringify(doctors));
+
+      document.getElementById('popupMessage').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('popupMessage').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+      }, 3000);
+
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>

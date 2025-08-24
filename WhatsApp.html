@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بلاغ طوارئ - MediLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    
+    .video-bg {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    body {
+      font-family: "Cairo", sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 15px;
+      position: relative;
+      z-index: 1;
+      color: #000;
+    }
+
+    h1, p {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 10px 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #004d40;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    .alert-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .btn {
+      height: 100px;
+      border: none;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .green { background: linear-gradient(45deg, #66bb6a, #43a047); }
+    .yellow { background: linear-gradient(45deg, #ffb74d, #fb8c00); }
+    .red { background: linear-gradient(45deg, #ef5350, #d32f2f); }
+    .black { background: linear-gradient(45deg, #757575, #212121); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 10px;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      font-family: "Cairo", sans-serif;
+      border: 1px solid #ccc;
+    }
+
+    .confirm {
+      background-color: #009688;
+      color: white;
+      border: none;
+    }
+
+    .confirm:hover {
+      background-color: #00695c;
+    }
+
+    .close {
+      background-color: #e0e0e0;
+    }
+
+    .close:hover {
+      background-color: #bdbdbd;
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 22px; }
+      .btn { font-size: 15px; height: 80px; }
+      .modal-content { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="video.mp4" type="video/webm" />
+      
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <h1>🚨 لوحة بلاغات الطوارئ</h1>
+  <p>اختاري نوع الحالة، الغرفة، واسم المريض لإرسال بلاغ فوري</p>
+
+  <div class="alert-buttons">
+    <button class="btn green" onclick="openModal('🟢 الحالة عادية')">🟢 عادية</button>
+    <button class="btn yellow" onclick="openModal('⚠️ الحالة متوسطة')">⚠️ متوسطة</button>
+    <button class="btn red" onclick="openModal('🚨 الحالة طارئة')">🚨 طارئة</button>
+    <button class="btn black" onclick="openModal('🆘 كود أحمر')">🆘 كود أحمر</button>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>📢 بلاغ جديد</h3>
+      <label>📍 اختر الغرفة:</label>
+      <select id="room" onchange="updatePatientList()"></select>
+
+      <label>👤 اختر المريض:</label>
+      <select id="patient"></select>
+
+      <button class="confirm" onclick="sendWhatsApp()">✅ إرسال البلاغ</button>
+      <button class="close" onclick="closeModal()">❌ إلغاء</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedStatus = "";
+    const phoneNumber = "201144032118";
+    const tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
+
+    function openModal(status) {
+      selectedStatus = status;
+      populateRooms();
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function populateRooms() {
+      const roomSelect = document.getElementById("room");
+      roomSelect.innerHTML = "";
+      const uniqueRooms = [...new Set(tickets.map((t) => t.roomNumber))];
+      uniqueRooms.forEach((room) => {
+        const option = document.createElement("option");
+        option.value = room;
+        option.textContent = `غرفة ${room}`;
+        roomSelect.appendChild(option);
+      });
+      updatePatientList();
+    }
+
+    function updatePatientList() {
+      const room = document.getElementById("room").value;
+      const patientSelect = document.getElementById("patient");
+      patientSelect.innerHTML = "";
+
+      const filtered = tickets.filter((t) => t.roomNumber === room);
+      const uniqueNames = [...new Set(filtered.map((t) => t.patientName))];
+      uniqueNames.forEach((name) => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        patientSelect.appendChild(option);
+      });
+    }
+
+    function sendWhatsApp() {
+      const room = document.getElementById("room").value;
+      const patient = document.getElementById("patient").value;
+      const message = `${selectedStatus}%0A👤 اسم المريض: ${patient}%0A🏥 الغرفة: ${room}`;
+      const url = `https://wa.me/${phoneNumber}?text=${message}`;
+      window.open(url, "_blank");
+      closeModal();
+    }
+  </script>
+</body>
+</html>

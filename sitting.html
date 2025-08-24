@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إعدادات MediLink</title>
+  <link rel="stylesheet" href="font/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f0f4f8;
+      color: #333;
+      transition: all 0.4s ease;
+    }
+
+    header {
+      background-color: #005baa;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      color: #005baa;
+    }
+
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .mode-toggle input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+    }
+
+    
+    body.dark-mode {
+    
+      color: #f0f0f0;
+    }
+
+    body.dark-mode main {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      box-shadow: 0 6px 20px rgba(255,255,255,0.05);
+    }
+
+    body.dark-mode header {
+      background-color: #222;
+      color: #90caf9;
+    }
+
+    body.dark-mode .mode-toggle span {
+      color: #eee;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    إعدادات MediLink
+  </header>
+
+  <main>
+    
+
+    <label class="mode-toggle">
+      <input type="checkbox" id="modeSwitch" />
+      <span>تفعيل الوضع الليلي 🌙</span>
+    </label>
+
+    <a class="back-link" href="main.html">🔙 العودة إلى الصفحة الرئيسية</a>
+  </main>
+
+  <script>
+    
+    const modeSwitch = document.getElementById("modeSwitch");
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+      modeSwitch.checked = true;
+    }
+
+    modeSwitch.addEventListener("change", () => {
+      if (modeSwitch.checked) {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.body.classList.remove("dark-mode");
+        localStorage.setItem("theme", "light");
+      }
+    });
+  </script>
+</body>
+</html>

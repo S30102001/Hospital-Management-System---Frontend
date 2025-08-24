@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تعديل تذكرة</title>
+  <link rel="stylesheet" href="font/bootstrap.min.css" />
+  <link rel="stylesheet" href="font/bootstrap.min.js" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-image: url("img/k.jpg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      direction: rtl;
+      display: flex;
+      flex-direction: row-reverse;
+      font-family: "Cairo", sans-serif;
+    }
+
+     .sidebar {
+  position: fixed; /* ✅ دي أهم نقطة */
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 250px;
+  direction: rtl;
+  text-align: right;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 30px 15px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+}
+
+    .sidebar .logo {
+      color: #00d9ff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .sidebar .nav-link {
+      color: white;
+      font-size: 16px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar .nav-link i {
+      margin-left: 8px;
+      color: #00d9ff;
+    }
+
+    .sidebar .nav-link:hover {
+      background-color: #00d9ff;
+      color: black;
+    }
+
+    .content {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .form-container h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 30px;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+  
+  body {
+    background-image: url("img/k.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: row-reverse;
+    font-family: "Cairo", sans-serif;
+    margin: 0;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 250px;
+    direction: rtl;
+    text-align: right;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 30px 15px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    z-index: 999;
+  }
+
+  .sidebar .logo {
+    color: #00d9ff;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .sidebar .nav-link {
+    color: white;
+    font-size: 16px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar .nav-link i {
+    margin-left: 8px;
+    color: #00d9ff;
+  }
+
+  .sidebar .nav-link:hover {
+    background-color: #00d9ff;
+    color: black;
+  }
+
+  .content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    padding-right: 270px; /* ترك مساحة للـsidebar */
+  }
+
+  .form-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .form-container h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 30px;
+    font-size: 24px;
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      position: relative;
+      width: 100%;
+      height: auto;
+      padding: 20px 10px;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .sidebar .logo {
+      text-align: right;
+      width: 100%;
+      font-size: 18px;
+    }
+
+    .sidebar ul {
+      width: 100%;
+    }
+
+    .sidebar .nav-link {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    .content {
+      padding: 20px;
+      padding-right: 0;
+    }
+
+    .form-container {
+      padding: 20px;
+    }
+
+    .form-container h1 {
+      font-size: 20px;
+    }
+
+    .btn-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn-group button,
+    .btn-group a {
+      width: 100%;
+    }
+  }
+
+  .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: #023d8a3a;
+      color: #000;
+      border: none;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background: rgb(242, 241, 247);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <i class="fas fa-notes-medical fa-2x"></i>
+      <h3>MediLink</h3>
+    </div>
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-plus-circle"></i> القايمة الرئيسيه</a></li>
+      <li class="nav-item"><a class="nav-link" href="add_ticket.html"><i class="fas fa-plus-circle"></i> إضافة تذكرة</a></li>
+      <li class="nav-item"><a class="nav-link" href="records.html"><i class="fas fa-plus-circle"></i> السجلات</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="registerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user-md"></i> تسجيل الطاقم الطبي
+        </a>
+        <div class="dropdown-menu" aria-labelledby="registerDropdown">
+          <a class="dropdown-item" href="doctor-register.html">طبيب</a>
+          <a class="dropdown-item" href="nurse-register.html">ممرض</a>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="room-management.html"><i class="fas fa-hospital-user"></i> إدارة التذاكر</a></li>
+      <li class="nav-item"><a class="nav-link" href="chat_nursing.html"><i class="fas fa-comments"></i> التواصل مع التمريض</a></li>
+      <li class="nav-item"><a class="nav-link" href="medical_knowledge.html"><i class="fas fa-book-medical"></i> المعرفة الطبية</a></li>
+      <li class="nav-item"><a class="nav-link" href="settings.html"><i class="fas fa-cogs"></i> الإعدادات</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <button class="close-btn" onclick="window.location.href='./index.html'">
+    <i class="fa-solid fa-square-xmark"></i>
+  </button>
+    <div class="form-container">
+      <h1><i class="fa-regular fa-pen-to-square"></i> تعديل التذكرة</h1>
+      <form id="ticketForm">
+        <div class="form-group">
+          <label for="patientName">👤 اسم المريض:</label>
+          <input type="text" class="form-control" id="patientName" required />
+        </div>
+        <div class="form-group">
+          <label for="doctorName">👨‍⚕️ اسم الدكتور:</label>
+          <input type="text" class="form-control" id="doctorName" required />
+        </div>
+        <div class="form-group">
+          <label for="nurseName">👩‍⚕️ اسم التمريض:</label>
+          <input type="text" class="form-control" id="nurseName" required />
+        </div>
+        <div class="form-group">
+          <label for="date">📅 تاريخ التذكرة:</label>
+          <input type="date" class="form-control" id="date" required />
+        </div>
+        <div class="form-group">
+          <label for="medicineName">💊 اسم الدواء:</label>
+          <input type="text" class="form-control" id="medicineName" required />
+        </div>
+        <div class="form-group">
+          <label for="medicineTime">⏰ وقت الدواء:</label>
+          <input type="time" class="form-control" id="medicineTime" required />
+        </div>
+        <div class="form-group">
+          <label for="rout">📌 طريقة أخذ العلاج:</label>
+          <input type="text" class="form-control" id="rout" required />
+        </div>
+        <div class="form-group">
+          <label for="status">🔍 حالة المريض:</label>
+          <select class="form-control" id="status">
+            <option value="مستقر">مستقر</option>
+            <option value="حرج">حرج</option>
+            <option value="شديد">شديد</option>
+          </select>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 حفظ التعديلات</button>
+          <a href="index.html" class="btn btn-secondary">⬅️ الرجوع للرئيسية</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const index = localStorage.getItem("editIndex");
+    const tickets = JSON.parse(localStorage.getItem("tickets")) || [];
+
+    if (!index || !tickets[index]) {
+      alert("❌ لم يتم العثور على التذكرة!");
+      window.location.href = "index.html";
+    }
+
+    const ticket = tickets[index];
+
+    
+    document.getElementById("patientName").value = ticket.patientName || "";
+    document.getElementById("doctorName").value = ticket.doctorName || "";
+    document.getElementById("nurseName").value = ticket.nurseName || "";
+    document.getElementById("date").value = ticket.date || "";
+    document.getElementById("medicineName").value = ticket.medicineName || "";
+    document.getElementById("medicineTime").value = ticket.medicineTime || "";
+    document.getElementById("rout").value = ticket.rout || "";
+    document.getElementById("status").value = ticket.status || "";
+
+    
+    document.getElementById("ticketForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      tickets[index] = {
+        patientName: document.getElementById("patientName").value,
+        doctorName: document.getElementById("doctorName").value,
+        nurseName: document.getElementById("nurseName").value,
+        date: document.getElementById("date").value,
+        medicineName: document.getElementById("medicineName").value,
+        medicineTime: document.getElementById("medicineTime").value,
+        rout: document.getElementById("rout").value,
+        status: document.getElementById("status").value,
+      };
+
+      localStorage.setItem("tickets", JSON.stringify(tickets));
+      localStorage.removeItem("editIndex");
+
+      alert("✅ تم حفظ التعديلات بنجاح!");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

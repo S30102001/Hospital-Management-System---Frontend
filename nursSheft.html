@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>عرض جداول المناوبات</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Fustat', sans-serif;
+      background-color: #f8f9fa;
+      padding: 30px;
+    }
+
+    .paper-style {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-link {
+      color: #1e3a8a;
+      font-weight: bold;
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: #1e3a8a;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #dee2e6;
+    }
+
+    th {
+      background-color: #1e40af;
+      color: white;
+    }
+
+    .btn-sm {
+      font-size: 13px;
+      padding: 4px 8px;
+    }
+
+    
+    @media (max-width: 768px) {
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+        width: 100%;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      }
+
+      td {
+        text-align: right;
+        padding: 10px 10px;
+        position: relative;
+        padding-right: 50%;
+        border: none;
+        border-bottom: 1px solid #eee;
+      }
+
+      td::before {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #1e3a8a;
+      }
+
+      
+      #daily td:nth-of-type(1)::before { content: "الاسم"; }
+      #daily td:nth-of-type(2)::before { content: "الوقت"; }
+      #daily td:nth-of-type(3)::before { content: "التاريخ"; }
+      #daily td:nth-of-type(4)::before { content: "الغرفة"; }
+      #daily td:nth-of-type(5)::before { content: "إجراءات"; }
+
+      
+      #monthly td:nth-of-type(1)::before { content: "اليوم"; }
+      #monthly td:nth-of-type(2)::before { content: "وردية صباحية"; }
+      #monthly td:nth-of-type(3)::before { content: "وردية مسائية"; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container paper-style">
+    <h2><i class="bi bi-journal-text"></i> عرض جداول المناوبات</h2>
+
+    <ul class="nav nav-tabs mb-3" id="tabs" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily" type="button">المناوبة اليومية</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly" type="button">المناوبة الشهرية</button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="daily">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم</th>
+              <th>الوقت</th>
+              <th>التاريخ</th>
+              <th>الغرفة</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="dailyBody"></tbody>
+        </table>
+      </div>
+
+      <div class="tab-pane fade" id="monthly">
+        <table>
+          <thead>
+            <tr>
+              <th>اليوم</th>
+              <th>وردية صباحية</th>
+              <th>وردية مسائية</th>
+            </tr>
+          </thead>
+          <tbody id="monthlyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function loadDailyRoster() {
+      const daily = JSON.parse(localStorage.getItem('dailyRoster') || '[]');
+      const body = document.getElementById('dailyBody');
+      body.innerHTML = '';
+      daily.forEach((item, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.time}</td>
+          <td>${item.date}</td>
+          <td>${item.room}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteDaily(${i})"><i class="bi bi-trash"></i></button>
+          </td>`;
+        body.appendChild(tr);
+      });
+    }
+
+    function deleteDaily(index) {
+      const daily = JSON.parse(localStorage.getItem('dailyRoster') || '[]');
+      daily.splice(index, 1);
+      localStorage.setItem('dailyRoster', JSON.stringify(daily));
+      loadDailyRoster();
+    }
+
+    function loadMonthlyRoster() {
+      const monthly = JSON.parse(localStorage.getItem('monthlyRoster') || '{}');
+      const body = document.getElementById('monthlyBody');
+      body.innerHTML = '';
+      for (let i = 1; i <= 30; i++) {
+        const day = monthly[`day-${i}`];
+        if (day) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>اليوم ${i}</td>
+            <td>${day.morning || '-'}</td>
+            <td>${day.evening || '-'}</td>`;
+          body.appendChild(tr);
+        }
+      }
+    }
+
+    loadDailyRoster();
+    loadMonthlyRoster();
+  </script>
+</body>
+</html>

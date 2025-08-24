@@ -1,0 +1,123 @@
+/* style.css */
+/* body {
+    font-family: 'Arial', sans-serif;
+    ;
+    background-color: #f2f7fa;
+    margin: 0;
+    direction: rtl;
+} */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f7fa;
+    margin: 0;
+    direction: rtl;
+}
+
+header {
+    background-color: #0077b6;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+header input {
+    margin-top: 1rem;
+    padding: 10px;
+    width: 60%;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+}
+
+main {
+    padding: 2rem;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    color: #0077b6;
+}
+
+.card p {
+    color: #333;
+}
+
+.card a {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #0077b6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+#booksSection {
+    padding: 2rem;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.book-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.book-card h3 {
+    margin: 1rem 0 0.5rem;
+    color: #0077b6;
+}
+
+.book-card p {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.book-card a {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 8px 15px;
+    background-color: #0096c7;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.book-card a:hover {
+    background-color: #0077b6;
+}
+
+footer {
+    background-color: #023e8a;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}

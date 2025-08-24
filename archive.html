@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تذاكر المرضى مع QR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <style>
+    body {
+      background: #eef3f7;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .ticket-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    .ticket-card:hover {
+      transform: scale(1.01);
+    }
+
+    .ticket-card h5 {
+      color: #0d6efd;
+      margin-bottom: 10px;
+    }
+
+    .qr-box {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .ticket-card .d-flex {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .qr-box {
+        margin-top: 15px;
+      }
+    }
+  </style>
+</head>
+<body class="container py-5">
+  <h2 class="text-center mb-4">🧾 تذاكر المرضى مع QR Code</h2>
+
+  <div id="ticketsContainer"></div>
+
+  <script>
+    let tickets = JSON.parse(localStorage.getItem("ticketsWithQR")) || [
+      { id: "T001", name: "محمد علي", medication: "باراسيتامول", time: "10:00 صباحًا" },
+      { id: "T002", name: "سارة حسن", medication: "أوغمنتين", time: "1:30 ظهرًا" },
+      { id: "T003", name: "أحمد جمال", medication: "انسولين", time: "6:00 مساءً" }
+    ];
+
+    localStorage.setItem("ticketsWithQR", JSON.stringify(tickets));
+
+    function renderTickets() {
+      const container = document.getElementById("ticketsContainer");
+      container.innerHTML = "";
+
+      tickets.forEach((ticket, index) => {
+        const ticketId = `qr-${index}`;
+        const qrData = `ID: ${ticket.id}\nName: ${ticket.name}\nMedication: ${ticket.medication}\nTime: ${ticket.time}`;
+
+        container.innerHTML += `
+          <div class="ticket-card">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+              <div>
+                <h5>👤 ${ticket.name}</h5>
+                <p><strong>💊 الدواء:</strong> ${ticket.medication}</p>
+                <p><strong>⏰ الوقت:</strong> ${ticket.time}</p>
+              </div>
+              <div class="qr-box" id="${ticketId}"></div>
+            </div>
+          </div>
+        `;
+
+        setTimeout(() => {
+          new QRCode(document.getElementById(ticketId), {
+            text: qrData,
+            width: 80,
+            height: 80
+          });
+        }, 100);
+      });
+    }
+
+    renderTickets();
+  </script>
+</body>
+</html>

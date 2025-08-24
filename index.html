@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediLink</title>
+
+  
+  <link rel="stylesheet" href="font/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  
+  <video autoplay muted loop id="bg-video">
+    <source src="hhhh.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+
+  
+  <header>
+    <div class="logo" onclick="window.location.href='./start.html'">MEDILINK</div>
+    <div class="menu-icon" id="menu-icon">☰</div>
+    <nav class="nav" id="nav">
+      <a href="index.html">الرئيسيه</a>
+      <a href="about.html">نبذة عنا...</a>
+      <a href="advantage.html">مميزات MediLink</a>
+      <a href="aboutUs.html">من نحن</a>
+      <a href="servic.html">تواصل</a>
+    </nav>
+  </header>
+
+
+  <main>
+    <section class="right">
+      <div class="login-box">
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+          <div class="input1">
+            <input type="text" placeholder="Username" required id="loginUsername" />
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div class="input2">
+            <input type="password" placeholder="Password" required id="loginPassword" />
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div class="remember">
+            <input type="checkbox" />
+            <label class="rem">Remember Me!</label>
+            <a href="#">Forget Password?</a>
+          </div>
+          <button class="submit" type="submit">Login</button>
+          <p class="register">Don't Have an account? <a href="#" id="show-register">Register Now</a></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  
+  <div id="overlay" class="overlay hidden"></div>
+
+  <div id="register-popup" class="register-popup hidden">
+    <div class="register-box">
+      <h2>إنشاء حساب جديد</h2>
+      <form id="registerForm">
+        <input type="text" id="newUsername" placeholder="اسم المستخدم" required />
+        <input type="password" id="newPassword" placeholder="كلمة المرور" required />
+        <button type="submit">إنشاء الحساب</button>
+      </form>
+      <button id="close-popup">✖</button>
+    </div>
+  </div>
+
+
+  <script>
+    
+    const menuIcon = document.getElementById('menu-icon');
+    const nav = document.getElementById('nav');
+
+    menuIcon.addEventListener('click', () => {
+      nav.classList.toggle('active');
+    });
+
+    
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      window.location.href = "aya.html";
+    });
+
+    
+    const showRegisterBtn = document.getElementById('show-register');
+    const overlay = document.getElementById('overlay');
+    const popup = document.getElementById('register-popup');
+    const closeBtn = document.getElementById('close-popup');
+
+    showRegisterBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      overlay.classList.remove('hidden');
+      popup.classList.remove('hidden');
+    });
+
+    closeBtn.addEventListener('click', function () {
+      overlay.classList.add('hidden');
+      popup.classList.add('hidden');
+    });
+
+    overlay.addEventListener('click', function () {
+      overlay.classList.add('hidden');
+      popup.classList.add('hidden');
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("newUsername").value;
+      const password = document.getElementById("newPassword").value;
+
+      localStorage.setItem("savedUsername", username);
+      localStorage.setItem("savedPassword", password);
+
+      alert("تم إنشاء الحساب بنجاح!");
+      overlay.classList.add('hidden');
+      popup.classList.add('hidden');
+    });
+  </script>
+</body>
+
+</html>

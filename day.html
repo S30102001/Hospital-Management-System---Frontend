@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>نظام الحضور والإنصراف للتمريض</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: rgb(6, 141, 137);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background: rgb(6, 141, 137);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      min-width: 600px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: rgb(6, 141, 137);
+      color: white;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      input, button {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>نظام تتبع الحضور والانصراف للتمريض</h1>
+
+    <div class="form">
+      <input type="text" id="nurseName" placeholder="أدخل اسم الممرض/ة">
+      <button onclick="markAttendance()">حضور</button>
+      <button onclick="markLeave()">انصراف</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>الاسم</th>
+            <th>التاريخ</th>
+            <th>وقت الحضور</th>
+            <th>وقت الانصراف</th>
+            <th>إزالة</th>
+          </tr>
+        </thead>
+        <tbody id="attendanceTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let attendanceRecords = JSON.parse(localStorage.getItem("attendanceRecords")) || [];
+
+    function saveAndRender() {
+      localStorage.setItem("attendanceRecords", JSON.stringify(attendanceRecords));
+      renderTable();
+    }
+
+    function renderTable() {
+      const table = document.getElementById("attendanceTable");
+      table.innerHTML = "";
+
+      attendanceRecords.forEach((record, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${record.name}</td>
+          <td>${record.date}</td>
+          <td>${record.inTime || '-'}</td>
+          <td>${record.outTime || '-'}</td>
+          <td><button class="delete-btn" onclick="deleteRecord(${index})">مسح</button></td>
+        `;
+
+        table.appendChild(row);
+      });
+    }
+
+    function getCurrentDate() {
+      return new Date().toLocaleDateString('ar-EG');
+    }
+
+    function getCurrentTime() {
+      return new Date().toLocaleTimeString('ar-EG');
+    }
+
+    function markAttendance() {
+      const name = document.getElementById("nurseName").value.trim();
+      if (!name) return alert("من فضلك أدخل الاسم");
+
+      const today = getCurrentDate();
+
+      const existing = attendanceRecords.find(r => r.name === name && r.date === today);
+      if (existing) {
+        existing.inTime = getCurrentTime();
+      } else {
+        attendanceRecords.push({
+          name,
+          date: today,
+          inTime: getCurrentTime(),
+          outTime: null
+        });
+      }
+      saveAndRender();
+    }
+
+    function markLeave() {
+      const name = document.getElementById("nurseName").value.trim();
+      if (!name) return alert("من فضلك أدخل الاسم");
+
+      const today = getCurrentDate();
+      const record = attendanceRecords.find(r => r.name === name && r.date === today);
+
+      if (record) {
+        record.outTime = getCurrentTime();
+        saveAndRender();
+      } else {
+        alert("لم يتم تسجيل الحضور بعد لهذا الاسم.");
+      }
+    }
+
+    function deleteRecord(index) {
+      attendanceRecords.splice(index, 1);
+      saveAndRender();
+    }
+
+    renderTable();
+  </script>
+
+</body>
+</html>

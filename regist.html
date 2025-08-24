@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تسجيل حساب جديد - MediLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(to left, #f1f8e9, #e0f7fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .register-box {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .register-box h2 {
+      text-align: center;
+      color: #00796b;
+      margin-bottom: 20px;
+    }
+
+    .register-box input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .register-box button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .register-box button:hover {
+      background-color: #004d40;
+    }
+
+    .back {
+      display: block;
+      margin-top: 15px;
+      text-align: center;
+      color: #00796b;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-box">
+    <h2>إنشاء حساب جديد</h2>
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="اسم المستخدم" required>
+      <input type="password" id="password" placeholder="كلمة المرور" required>
+      <button type="submit">تسجيل الحساب</button>
+    </form>
+    <a href="index.html" class="back">⬅ الرجوع للرئيسية</a>
+  </div>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      localStorage.setItem('savedUsername', username);
+      localStorage.setItem('savedPassword', password);
+
+      alert('✅ تم إنشاء الحساب بنجاح!');
+      window.location.href = 'index.html';
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تذكير الأدوية حسب الغرف</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap + أيقونات -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet" />
+
+
+  <style>
+
+    body {
+      background-color: #f6f9fc;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin-top: 40px;
+      padding: 0 15px;
+    }
+
+    .form-section {
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.07);
+      margin-bottom: 30px;
+    }
+
+    .table thead {
+      background-color: rgb(6, 141, 137);
+      color: #fff;
+      text-align: center;
+    }
+
+    .btn-action {
+      margin-left: 5px;
+    }
+
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 20px;
+      }
+
+      .form-section {
+        padding: 15px;
+      }
+
+      .form-control {
+        font-size: 14px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+    }
+  
+    body {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+      background: linear-gradient(to bottom left, #dbeafe, #f0f9ff);
+      padding: 30px;
+    }
+
+    h2 {
+      color: rgb(6, 141, 137);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .nav-tabs .nav-link {
+      font-weight: bold;
+      color: rgb(6, 141, 137);
+      background-color: #e7f3ff;
+      border-radius: 10px 10px 0 0;
+      margin-left: 5px;
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: rgb(6, 141, 137);
+      color: white;
+      border: none;
+    }
+
+    .tab-content {
+      background-color: #ffffff;
+      border-radius: 0 0 15px 15px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .card {
+      text-align: right;
+      border: 2px solid #00c8e0;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: white;
+      transition: all 0.5s ease-in-out;
+      word-wrap: break-word;
+    }
+
+    .expired {
+      background-color: #ffe6e6 !important;
+      animation: shake 0.6s infinite;
+    }
+
+    .card h5 {
+      color: #00aabb;
+    }
+
+    .countdown {
+      font-weight: bold;
+      color: #ff0000;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .card table td, .card table th {
+      text-align: center;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2><i class="fas fa-notes-medical"></i> التذكير بالأدوية حسب الغرف</h2>
+    <ul class="nav nav-tabs flex-wrap justify-content-center" id="roomTabs" role="tablist"></ul>
+    <div class="tab-content mt-3" id="roomTabsContent"></div>
+  </div>
+
+  <audio id="alertSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+
+  <script>
+    function appendLogToCard(patientName, nurse, condition, route, time) {
+      const table = document.createElement("table");
+      table.className = "table table-bordered mt-2 small";
+      table.innerHTML = `
+        <thead class="table-light">
+          <tr>
+            <th><i class="fas fa-user-nurse"></i> التمريض</th>
+            <th><i class="fas fa-stethoscope"></i> الحالة</th>
+            <th><i class="fas fa-syringe"></i> الطريقة</th>
+            <th><i class="fas fa-clock"></i> التاريخ/الوقت</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${nurse}</td>
+            <td>${condition}</td>
+            <td>${route || "غير محددة"}</td>
+            <td>${time}</td>
+          </tr>
+        </tbody>`;
+
+      const patientCards = document.querySelectorAll(".card");
+      patientCards.forEach(card => {
+        if (card.textContent.includes(patientName)) {
+          card.appendChild(table);
+        }
+      });
+    }
+
+    function renderTabs() {
+      const tickets = JSON.parse(localStorage.getItem("tickets")) || [];
+      const roomGroups = {};
+
+      tickets.forEach((ticket, i) => {
+        ticket.index = i;
+        const room = ticket.roomNumber || 'غير محدد';
+        if (!roomGroups[room]) roomGroups[room] = [];
+        roomGroups[room].push(ticket);
+      });
+
+      const tabsContainer = document.getElementById("roomTabs");
+      const contentContainer = document.getElementById("roomTabsContent");
+      tabsContainer.innerHTML = "";
+      contentContainer.innerHTML = "";
+
+      let first = true;
+      Object.keys(roomGroups).forEach((room, idx) => {
+        const tabId = `room${idx}`;
+
+        tabsContainer.innerHTML += `
+          <li class="nav-item">
+            <a class="nav-link ${first ? 'active' : ''}" id="${tabId}-tab" data-toggle="tab" href="#${tabId}" role="tab">غرفة ${room}</a>
+          </li>`;
+
+        const cardsHtml = roomGroups[room].map(ticket => {
+          let hasMedicine = false;
+          let content = "";
+
+          const generateMedicineItem = (name, time, route, isMain, medIndex = null) => {
+            if (!name || !time) return "";
+            const now = new Date();
+            const medTimeParts = time.split(":"), medTime = new Date();
+            medTime.setHours(+medTimeParts[0], +medTimeParts[1], 0, 0);
+            const diffMs = medTime - now,
+                  diffMin = Math.floor(diffMs / 60000),
+                  diffSec = Math.floor((diffMs % 60000) / 1000),
+                  isExpired = diffMs <= 0;
+
+            if (isExpired) {
+              setTimeout(() => document.getElementById("alertSound").play(), 0);
+              const medicineLog = JSON.parse(localStorage.getItem("medicineLog") || "[]");
+              medicineLog.push({
+                patient: ticket.patientName,
+                nurse: "غير محدد",
+                time: new Date().toLocaleString(),
+                condition: "غير محددة"
+              });
+              localStorage.setItem("medicineLog", JSON.stringify(medicineLog));
+              appendLogToCard(ticket.patientName, "غير محدد", "غير محددة", route, new Date().toLocaleString());
+            }
+
+            hasMedicine = true;
+
+            const countdownText = isExpired
+              ? "<span class='countdown'>⏰ انتهى الوقت</span>"
+              : `<span class='countdown' data-time='${time}'>${diffMin} دقيقة و ${diffSec} ثانية</span>`;
+
+            const deleteBtn = `<button class='btn btn-sm btn-danger btn-delete-med' onclick='deleteMedicine(${ticket.index}, ${isMain ? -1 : medIndex})'><i class="fas fa-trash"></i> حذف الدواء</button>`;
+
+            return `
+              <div class="border p-2 rounded mb-2 ${isExpired ? 'expired' : ''}">
+                <p><strong>${isMain ? 'دواء أساسي' : 'علاج إضافي'}:</strong> ${name} ${deleteBtn}</p>
+                <p><strong>الوقت:</strong> ${time}</p>
+                <p><strong>طريقة العلاج:</strong> ${route || 'غير محددة'}</p>
+                <p><strong>العد التنازلي:</strong> ${countdownText}</p>
+              </div>`;
+          };
+
+          if (ticket.medicineName && ticket.medicineTime) {
+            content += generateMedicineItem(ticket.medicineName, ticket.medicineTime, ticket.rout, true);
+          }
+
+          if (ticket.medications && Array.isArray(ticket.medications)) {
+            ticket.medications.forEach((med, medIndex) => {
+              content += generateMedicineItem(med.name, med.time, med.route, false, medIndex);
+            });
+          }
+
+          return hasMedicine ? `
+            <div class="card shadow mb-3">
+              <h5><i class='fas fa-user'></i> ${ticket.patientName}</h5>
+              ${content}
+            </div>` : "";
+        }).join("");
+
+        contentContainer.innerHTML += `
+          <div class="tab-pane fade ${first ? 'show active' : ''}" id="${tabId}" role="tabpanel">
+            ${cardsHtml || '<p class="text-muted">لا توجد أدوية في هذه الغرفة</p>'}
+          </div>`;
+
+        first = false;
+      });
+    }
+
+    function deleteMedicine(ticketIndex, medIndex) {
+      const tickets = JSON.parse(localStorage.getItem("tickets")) || [];
+      if (medIndex === -1) {
+        tickets[ticketIndex].medicineName = "";
+        tickets[ticketIndex].medicineTime = "";
+        tickets[ticketIndex].rout = "";
+      } else {
+        tickets[ticketIndex].medications.splice(medIndex, 1);
+      }
+      localStorage.setItem("tickets", JSON.stringify(tickets));
+      renderTabs();
+    }
+
+    function updateCountdowns() {
+      const countdownElements = document.querySelectorAll(".countdown[data-time]");
+      const now = new Date();
+      countdownElements.forEach(el => {
+        const time = el.dataset.time;
+        const parts = time.split(":"), target = new Date();
+        target.setHours(+parts[0], +parts[1], 0, 0);
+        const diffMs = target - now;
+        if (diffMs <= 0) {
+          el.innerHTML = "⏰ انتهى الوقت";
+          el.closest(".border").classList.add("expired");
+        } else {
+          const diffMin = Math.floor(diffMs / 60000);
+          const diffSec = Math.floor((diffMs % 60000) / 1000);
+          el.innerHTML = `${diffMin} دقيقة و ${diffSec} ثانية`;
+        }
+      });
+    }
+
+    renderTabs();
+    setInterval(updateCountdowns, 1000);
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>من نحن - MediLink</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color:#fff;
+      color: #000;
+      border: none;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background: #fff;
+    }
+
+    body {
+      background-color: #f7faff;
+      color: #333;
+      direction: rtl;
+      padding: 20px;
+    }
+
+    .about-section {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .about-section h1 {
+      font-size: 2.8rem;
+      color: rgb(25, 196, 190);
+      margin-bottom: 20px;
+    }
+
+    .about-section p {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+
+    .team-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .team-card {
+      background-color: white;
+      width: 250px;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .team-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid rgb(25, 196, 190);
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .team-card h3 {
+      margin: 10px 0 5px;
+      color: rgb(25, 196, 190);
+      font-size: 1.2rem;
+    }
+
+    .team-card p {
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .team-card .role {
+      font-weight: bold;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .about-section h1 {
+        font-size: 2rem;
+      }
+
+      .team-card {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="about-section">
+    <button class="close-btn" onclick="window.location.href='./Login.html'">
+    <i class="fa-solid fa-square-xmark"></i>
+  </button>
+
+    <h1>من نحن</h1>
+    <p>نحن فريق من المطورين والمصممين نعمل على تطوير منصة MediLink لتحسين الرعاية الصحية داخل المستشفيات وتسهيل التواصل بين الأطقم الطبية.</p>
+
+    <div class="team-container">
+
+      <div class="team-card">
+        <img src="sabreen.jpg" alt="صابرين">
+        <h3>صابرين عطالله</h3>
+        <p class="role">قائدة المشروع | Frontend</p>
+        <p>تهتم بتطوير واجهة المستخدم وتحسين تجربة التمريض في النظام الرقمي.</p>
+      </div>
+
+      <div class="team-card">
+        <img src="aya.jpg" alt="محمد">
+        <h3>ايه عبد الحكيم</h3>
+        <p class="role">Backend Developer</p>
+        <p>مسؤول عن قواعد البيانات وتأمين البيانات الطبية داخل النظام.</p>
+      </div>
+
+      <div class="team-card">
+        <img src="eslam.jpg" alt="فاطمة">
+        <h3>اسلام</h3>
+        <p class="role">UX/UI Designer</p>
+        <p>تصمم واجهات سهلة وبسيطة للمستخدمين داخل بيئة المستشفى.</p>
+      </div>
+
+      <div class="team-card">
+        <img src="ahmed.jpg" alt="أحمد">
+        <h3>أحمد منصور</h3>
+        <p class="role">Full Stack Developer</p>
+        <p>يربط كل أجزاء المشروع معًا ويتأكد من عمله بكفاءة وسرعة.</p>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

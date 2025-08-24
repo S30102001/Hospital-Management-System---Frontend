@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>السجلات العامة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-image: url("img/k.jpg");
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      direction: rtl;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #000;
+      margin-bottom: 40px;
+    }
+
+    .section {
+      background-color: rgba(41, 35, 35, 0.349);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 10px 20px 10px 10px rgba(0, 0, 0, 0.644);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(77, 58, 58, 0.37);
+      color: #000;
+    }
+
+    .title {
+      font-size: 20px;
+      color: #03161b;
+      margin-bottom: 15px;
+    }
+
+    .navbar {
+      background-color: rgb(6, 141, 137);
+      backdrop-filter: blur(1px);
+      height: 70px;
+      font-size: 30px;
+      
+    }
+
+    .navbar-brand,
+    .navbar-nav .nav-link {
+      color: white !important;
+      font-weight: 40px;
+      margin-left: 6px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #012b2b !important;
+    }
+
+    h1 {
+      color: rgba(0, 0, 0, 0.7);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255,255,255,0.8);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background: red;
+      color: #fff;
+    }
+
+    .btn-sm {
+      font-size: 12px;
+    }
+
+    .filter-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* ✅ RESPONSIVE */
+    @media (max-width: 768px) {
+      .filter-section {
+        flex-direction: column;
+      }
+
+      .section {
+        padding: 10px;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin-top: 80px;
+      }
+
+      .nav-tabs .nav-link {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .close-btn {
+        top: 80px;
+        left: 10px;
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a  style="font-size: 30px;" class="navbar-brand" href="index.html"><i class="fas fa-notes-medical" style="font-size: 30px;"></i> MediLink</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"><i class="fas fa-bars" style="color: white;"></i></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="./main.html"><i class="fa-solid fa-circle-chevron-left"></i></a></li>
+        <!-- <li class="nav-item"><a class="nav-link" href="records.html">السجلات</a></li> -->
+        <!-- <li class="nav-item"><a class="nav-link" href="room-management.html">إدارة التذاكر</a></li>
+        <li class="nav-item"><a class="nav-link" href="add_ticket.html">إضافة التذاكر</a></li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<button class="close-btn" onclick="window.location.href='main.html'">X</button>
+<h2 style="margin-top: 100px;">📋 لوحة السجلات العامة</h2>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#doctors"><i class="fa-solid fa-user-doctor"></i> الأطباء</a></li>
+  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#nurses"><i class="fa-solid fa-user-nurse"></i> الممرضين</a></li>
+  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#patients"><i class="fa-solid fa-bed"></i> المرضى</a></li>
+  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#medicines"><i class="fas fa-pills"></i> الأدوية</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="doctors" class="tab-pane fade show active">
+    <div class="section">
+      <div class="title">الأطباء المسجلين</div>
+      <input type="text" id="doctorFilter" placeholder="بحث عن طبيب..." class="form-control mb-3">
+      <table id="doctorsTable"><thead><tr>
+        <th>Id</th><th>الاسم</th><th>التخصص</th><th>تاريخ الميلاد</th><th>تاريخ التخرج</th><th>رقم الهاتف</th><th>الإيميل</th><th>تعديل / حذف</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <div id="nurses" class="tab-pane fade">
+    <div class="section">
+      <div class="title">الممرضين المسجلين</div>
+      <input type="text" id="nurseFilter" placeholder="بحث عن ممرض..." class="form-control mb-3">
+      <table id="nursesTable"><thead><tr>
+        <th>ID</th><th>الاسم</th><th>القسم</th><th>تاريخ الميلاد</th><th>تاريخ التعيين</th><th>رقم الهاتف</th><th>الإيميل</th><th>تعديل / حذف</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <div id="patients" class="tab-pane fade">
+    <div class="section">
+      <div class="title">المرضى المسجلين</div>
+      <div class="filter-section">
+        <input type="text" id="patientFilter" placeholder="بحث عن مريض..." class="form-control">
+        <input type="date" id="patientDateFilter" class="form-control" />
+      </div>
+      <table id="patientsTable"><thead><tr>
+        <th>ID</th><th>الاسم</th><th>تاريخ الميلاد</th><th>تاريخ الدخول</th><th>الحالة</th><th>التشخيص</th><th>رقم الغرفة</th><th>تعديل / حذف</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <div id="medicines" class="tab-pane fade">
+    <div class="section">
+      <div class="title">سجلات الأدوية</div>
+      <input type="text" id="medicineFilter" placeholder="بحث عن دواء..." class="form-control mb-3">
+      <table id="medicinesTable"><thead><tr>
+        <th>اسم الدواء</th><th>الجرعة</th><th>طريقة الاستخدام</th><th>المدة</th><th>تاريخ الشراء</th><th>تاريخ الصلاحية</th><th>ملاحظات</th><th>تعديل / حذف</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function generateID(prefix, index) {
+    return `${prefix}-${index + 1}`;
+  }
+
+  const doctors = JSON.parse(localStorage.getItem("doctors") || "[]");
+  const nurses = JSON.parse(localStorage.getItem("nurses") || "[]");
+  const patients = JSON.parse(localStorage.getItem("patients") || "[]");
+  const medicines = JSON.parse(localStorage.getItem("medicines") || "[]");
+
+  function renderTable(id, data, keys, type) {
+    const tbody = document.querySelector(`#${id} tbody`);
+    tbody.innerHTML = "";
+    data.forEach((obj, index) => {
+      const row = document.createElement("tr");
+      if (type !== "medicines") {
+        const idCell = document.createElement("td");
+        idCell.innerText = generateID(type.slice(0, 3).toUpperCase(), index);
+        row.appendChild(idCell);
+      }
+      keys.forEach(k => {
+        const cell = document.createElement("td");
+        cell.innerText = obj[k] || "-";
+        row.appendChild(cell);
+      });
+
+      const actionCell = document.createElement("td");
+      actionCell.innerHTML = `
+        <button class="btn btn-sm btn-info" onclick="editRecord('${type}', ${index})"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="deleteRecord('${type}', ${index})"><i class="fas fa-trash"></i></button>
+      `;
+      row.appendChild(actionCell);
+      tbody.appendChild(row);
+    });
+  }
+
+  function filterTable(inputId, dateId, tableId, data, keys, type) {
+    const text = document.getElementById(inputId).value.toLowerCase();
+    const date = document.getElementById(dateId)?.value;
+    const filtered = data.filter(obj =>
+      keys.some(k => (obj[k] || "").toLowerCase().includes(text)) &&
+      (!date || obj["admissionDate"] === date)
+    );
+    renderTable(tableId, filtered, keys, type);
+  }
+
+  function editRecord(type, index) {
+    localStorage.setItem("editType", type);
+    localStorage.setItem("editIndex", index);
+    window.location.href = "edit-record.html";
+  }
+
+  function deleteRecord(type, index) {
+    const data = JSON.parse(localStorage.getItem(type)) || [];
+    if (confirm("هل أنت متأكد من حذف هذا السجل؟")) {
+      data.splice(index, 1);
+      localStorage.setItem(type, JSON.stringify(data));
+      location.reload();
+    }
+  }
+
+  renderTable("doctorsTable", doctors, ["name", "specialization", "birthDate", "gradDate", "phone", "email"], "doctors");
+  renderTable("nursesTable", nurses, ["name", "department", "birthDate", "hiringDate", "phone", "email"], "nurses");
+  renderTable("patientsTable", patients, ["name", "birthDate", "admissionDate", "healthStatus", "diagnosis", "roomNumber"], "patients");
+  renderTable("medicinesTable", medicines, ["name", "dose", "method", "duration", "purchaseDate", "expiryDate", "notes"], "medicines");
+
+  document.getElementById("doctorFilter").addEventListener("input", () => {
+    filterTable("doctorFilter", null, "doctorsTable", doctors, ["name", "specialization", "birthDate", "gradDate", "phone", "email"], "doctors");
+  });
+
+  document.getElementById("nurseFilter").addEventListener("input", () => {
+    filterTable("nurseFilter", null, "nursesTable", nurses, ["name", "department", "birthDate", "hiringDate", "phone", "email"], "nurses");
+  });
+
+  document.getElementById("patientFilter").addEventListener("input", () => {
+    filterTable("patientFilter", "patientDateFilter", "patientsTable", patients, ["name", "birthDate", "admissionDate", "healthStatus", "diagnosis", "roomNumber"], "patients");
+  });
+
+  document.getElementById("patientDateFilter").addEventListener("input", () => {
+    filterTable("patientFilter", "patientDateFilter", "patientsTable", patients, ["name", "birthDate", "admissionDate", "healthStatus", "diagnosis", "roomNumber"], "patients");
+  });
+
+  document.getElementById("medicineFilter").addEventListener("input", () => {
+    const keyword = document.getElementById("medicineFilter").value.toLowerCase();
+    const filtered = medicines.filter(m => m.name.toLowerCase().includes(keyword));
+    renderTable("medicinesTable", filtered, ["name", "dose", "method", "duration", "purchaseDate", "expiryDate", "notes"], "medicines");
+  });
+</script>
+</body>
+</html>

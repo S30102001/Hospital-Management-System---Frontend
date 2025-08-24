@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متابعة الأدوية - MediLink</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f5f8fa;
+      font-family: 'Cairo', sans-serif;
+    }
+    .card-med {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      background: #fff;
+      transition: background-color 0.3s ease;
+    }
+    .card-med.expired {
+      background-color: #ffe6e6;
+      animation: shake 0.5s infinite;
+    }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    .btn-done {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+    }
+    .section-title {
+      font-weight: bold;
+      color: rgb(6, 141, 137);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .form-control, .btn {
+        font-size: 14px;
+      }
+      .card-med {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <h2 class="section-title text-center"><i class="fa-solid fa-kit-medical"></i> متابعـــة الأدويــــة</h2>
+
+    <form id="medForm" class="row gy-2 gx-3 mb-4 align-items-center">
+      <div class="col-lg-3 col-md-6">
+        <input type="text" class="form-control" id="patient" placeholder="اسم المريض" required />
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <input type="text" class="form-control" id="medicine" placeholder="اسم الدواء" required />
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <input type="text" class="form-control" id="method" placeholder="طريقة التناول" required />
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <input type="number" class="form-control" id="time" placeholder="الوقت بالدقائق" required />
+      </div>
+      <div class="col-lg-1 col-12">
+        <button type="submit" style="background-color: rgb(6, 141, 137);;" class="btn btn-primary w-100">إضافة</button>
+      </div>
+    </form>
+
+    <div id="medList" class="row gy-3"></div>
+  </div>
+
+  
+  <div class="modal fade" id="nurseModal" tabindex="-1" aria-labelledby="nurseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="nurseModalLabel">من قام بإعطاء الدواء؟</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <select id="nurseSelect" class="form-select mb-3">
+            <option disabled selected>اختر اسم التمريض</option>
+          </select>
+          <select id="conditionSelect" class="form-select mb-3">
+            <option value="مستقر">مستقر</option>
+            <option value="غير مستقر">غير مستقر</option>
+          </select>
+          <button class="btn btn-success w-100" onclick="confirmGiving()">تم إعطاء الدواء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const form = document.getElementById('medForm');
+    const list = document.getElementById('medList');
+
+    function saveMeds(meds) {
+      localStorage.setItem('meds', JSON.stringify(meds));
+    }
+
+    function loadMeds() {
+      return JSON.parse(localStorage.getItem('meds') || '[]');
+    }
+
+    function renderMeds() {
+      list.innerHTML = '';
+      const meds = loadMeds();
+      meds.forEach((med, i) => {
+        const timeLeft = Math.max(0, Math.floor((med.end - Date.now()) / 1000));
+        const card = document.createElement('div');
+        card.className = 'col-lg-4 col-md-6';
+        card.innerHTML = `
+          <div class="card-med ${timeLeft === 0 ? 'expired' : ''}" id="card-${i}">
+            <h5>👤 ${med.patient}</h5>
+            <p><strong>الدواء:</strong> ${med.medicine}</p>
+            <p><strong>الطريقة:</strong> ${med.method}</p>
+            <p><strong>الوقت المتبقي:</strong> <span id="timer-${i}">${timeLeft}</span> ثانية</p>
+            ${timeLeft === 0 ? '<button class="btn btn-danger btn-sm btn-done" onclick="showNurseModal(\'' + med.patient + '\', ' + i + ')">تم</button>' : ''}
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function showNurseModal(patientName, index) {
+      window.currentMedIndex = index;
+      window.currentPatient = patientName;
+
+      const nurseSelect = document.getElementById('nurseSelect');
+      nurseSelect.innerHTML = '<option disabled selected>اختر اسم التمريض</option>';
+      const nurses = JSON.parse(localStorage.getItem('nurses') || '[]');
+      nurses.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n.name;
+        opt.textContent = n.name;
+        nurseSelect.appendChild(opt);
+      });
+
+      new bootstrap.Modal(document.getElementById('nurseModal')).show();
+    }
+
+    function confirmGiving() {
+  const nurse = document.getElementById('nurseSelect').value;
+  const condition = document.getElementById('conditionSelect').value;
+  const log = JSON.parse(localStorage.getItem('medicineLog') || '[]');
+  log.push({
+    patient: window.currentPatient,
+    nurse: nurse,
+    condition: condition,
+    time: new Date().toLocaleString()
+  });
+  localStorage.setItem('medicineLog', JSON.stringify(log));
+
+      localStorage.setItem('medicineLog', JSON.stringify(log));
+
+      const meds = loadMeds();
+      meds.splice(window.currentMedIndex, 1);
+      saveMeds(meds);
+      renderMeds();
+
+      bootstrap.Modal.getInstance(document.getElementById('nurseModal')).hide();
+    }
+
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      const meds = loadMeds();
+      meds.push({
+        patient: form.patient.value,
+        medicine: form.medicine.value,
+        method: form.method.value,
+        end: Date.now() + form.time.value * 60000
+      });
+      saveMeds(meds);
+      form.reset();
+      renderMeds();
+    };
+
+    setInterval(() => {
+      const meds = loadMeds();
+      meds.forEach((med, i) => {
+        const span = document.getElementById('timer-' + i);
+        const card = document.getElementById('card-' + i);
+        if (span) {
+          const timeLeft = Math.max(0, Math.floor((med.end - Date.now()) / 1000));
+          span.textContent = timeLeft;
+          if (timeLeft === 0 && !card.classList.contains('expired')) {
+            card.classList.add('expired');
+            card.innerHTML += `<button class="btn btn-danger btn-sm btn-done" onclick="showNurseModal('${med.patient}', ${i})">تم</button>`;
+          }
+        }
+      });
+    }, 1000);
+
+    renderMeds();
+  </script>
+</body>
+</html>

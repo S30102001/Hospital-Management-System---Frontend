@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة متابعة التذاكر - MediLink</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f2f8fc;
+      padding: 50px 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: rgb(6, 141, 137);
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .nav-tabs .nav-link {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .nav-tabs .nav-link i {
+      margin-left: 8px;
+      color: rgb(6, 141, 137);
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: rgb(6, 141, 137);
+      color: #fff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 15px;
+    }
+
+    @media (max-width: 767px) {
+      h2 {
+        font-size: 22px;
+      }
+
+      .nav-tabs .nav-link {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      iframe {
+        height: 500px;
+      }
+
+      .modal-content {
+        font-size: 14px;
+      }
+
+      .modal-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2><i class="fas fa-clipboard-list"></i> لوحة متابعة التذاكر</h2>
+
+  <ul class="nav nav-tabs justify-content-center mb-4" id="ticketTabs" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="method1-tab" data-bs-toggle="tab" data-bs-target="#method1" type="button" role="tab">
+        <i class="fas fa-bell"></i> طريقة التذكير 1
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="method2-tab" data-bs-toggle="tab" data-bs-target="#method2" type="button" role="tab">
+        <i class="fas fa-clock"></i> طريقة التذكير 2
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="log-tab" data-bs-toggle="tab" data-bs-target="#log" type="button" role="tab">
+        <i class="fas fa-notes-medical"></i> سجل إعطاء الدواء
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="method1" role="tabpanel">
+      <iframe src="SmartMed-Tracker.html"></iframe>
+    </div>
+    <div class="tab-pane fade" id="method2" role="tabpanel">
+      <iframe src="medicine-reminder.html"></iframe>
+    </div>
+    <div class="tab-pane fade" id="log" role="tabpanel">
+      <iframe src="medicineLog.html"></iframe>
+    </div>
+  </div>
+
+  
+  <div class="modal fade" id="nurseModal" tabindex="-1" aria-labelledby="nurseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="nurseModalLabel">من قام بإعطاء الدواء؟</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nurseSelect" class="form-label">اسم التمريض</label>
+            <select id="nurseSelect" class="form-select" required>
+              <option disabled selected>اختر اسم التمريض</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="conditionSelect" class="form-label">حالة المريض</label>
+            <select id="conditionSelect" class="form-select" required>
+              <option value="مستقر">مستقر</option>
+              <option value="غير مستقر">غير مستقر</option>
+            </select>
+          </div>
+          <button class="btn btn-success w-100" onclick="confirmGiving()">تم إعطاء الدواء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function showNurseModal(patientName) {
+      const nurses = JSON.parse(localStorage.getItem("nurses") || "[]");
+      const nurseSelect = document.getElementById("nurseSelect");
+      nurseSelect.innerHTML = `<option disabled selected>اختر اسم التمريض</option>`;
+      nurses.forEach(n => {
+        const opt = document.createElement("option");
+        opt.value = n.name;
+        opt.textContent = n.name;
+        nurseSelect.appendChild(opt);
+      });
+
+      window.currentPatientName = patientName;
+      const modal = new bootstrap.Modal(document.getElementById("nurseModal"));
+      modal.show();
+    }
+
+    function confirmGiving() {
+      const nurse = document.getElementById("nurseSelect").value;
+      const condition = document.getElementById("conditionSelect").value;
+      const patient = window.currentPatientName;
+
+      if (!nurse) return alert("يرجى اختيار اسم التمريض");
+
+      const log = JSON.parse(localStorage.getItem("medicineLog") || "[]");
+      log.push({
+        patient: patient,
+        nurse: nurse,
+        time: new Date().toLocaleString(),
+        condition: condition
+      });
+
+      localStorage.setItem("medicineLog", JSON.stringify(log));
+      bootstrap.Modal.getInstance(document.getElementById("nurseModal")).hide();
+      loadLog();
+    }
+
+    function loadLog() {
+      
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const pendingPatientName = localStorage.getItem("pendingPatientName");
+      if (pendingPatientName) {
+        showNurseModal(pendingPatientName);
+        localStorage.removeItem("pendingPatientName");
+      }
+      loadLog();
+    });
+  </script>
+</body>
+</html>
